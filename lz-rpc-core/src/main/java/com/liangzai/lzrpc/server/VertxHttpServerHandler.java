@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
  * @Date 2024/10/29 19:41
  * @Descprition
  */
-public class HttpServerHandler implements Handler<HttpServerRequest> {
+public class VertxHttpServerHandler implements Handler<HttpServerRequest> {
 	/**
 	  反序列化请求为对象，并从请求对象中获取参数。
 	  根据服务名称从本地注册器中获取到对应的服务实现类。

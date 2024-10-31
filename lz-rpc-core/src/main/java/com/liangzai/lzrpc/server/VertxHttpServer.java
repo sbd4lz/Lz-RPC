@@ -1,12 +1,14 @@
 package com.liangzai.lzrpc.server;
 
 import io.vertx.core.Vertx;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Author dengpei
  * @Date 2024/10/29 17:30
  * @Descprition
  */
+@Slf4j
 public class VertxHttpServer implements HttpServer{
 	@Override
 	public void doStart(int port) {
@@ -24,14 +26,14 @@ public class VertxHttpServer implements HttpServer{
 //					.end("Hello from Vert.x HTTP server!");
 //		});
 
-		server.requestHandler(new HttpServerHandler());
+		server.requestHandler(new VertxHttpServerHandler());
 
 		// 启动HTTP服务器并监听指定端口
 		server.listen(port, result -> {
 			if (result.succeeded()) {
-				System.out.println("Server is now listening on port " + port);
+				log.info("Server is now listening on port " + port);
 			} else {
-				System.err.println("Failed to start server: " + result.cause());
+				log.error("Failed to start server: " + result.cause());
 			}
 		});
 

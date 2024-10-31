@@ -11,10 +11,12 @@ public class ExampleConsumerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ExampleConsumerApplication.class, args);
-		UserService userService = ServiceProxyFactory.getProxy(UserService.class);
+
 		User user = new User();
 		user.setName("dogpei");
-		// 调用
+
+		// 调用   todo 用注解实现 获取注册中心实例 + 依赖注入
+		UserService userService = ServiceProxyFactory.getProxy(UserService.class);
 		User newUser = userService.getUser(user);
 		if (newUser != null) {
 			System.out.println(newUser.getName());

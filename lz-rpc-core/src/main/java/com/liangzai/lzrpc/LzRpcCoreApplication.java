@@ -2,22 +2,22 @@ package com.liangzai.lzrpc;
 
 import com.liangzai.lzrpc.config.RpcConfig;
 import com.liangzai.lzrpc.server.HttpServer;
-import com.liangzai.lzrpc.server.VertxHttpServer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.liangzai.lzrpc.server.HutoolHttpServer;
 
 /**
  * @author Kitsch
  */
-@SpringBootApplication
+//@SpringBootApplication
 public class LzRpcCoreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LzRpcCoreApplication.class, args);
+//		SpringApplication.run(LzRpcCoreApplication.class, args);
 
 		RpcConfig rpc = RpcApplication.getRpcConfig();
-		HttpServer vertxHttpServer = new VertxHttpServer();
-		vertxHttpServer.doStart(8080);
+//		HttpServer vertxHttpServer = new VertxHttpServer();
+//		vertxHttpServer.doStart(rpc.getServerPort());
+		HttpServer hutoolServer = new HutoolHttpServer();
+		hutoolServer.doStart(rpc.getServerPort());
 	}
 
 }
