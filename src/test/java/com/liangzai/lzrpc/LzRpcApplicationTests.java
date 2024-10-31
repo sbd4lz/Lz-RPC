@@ -8,6 +8,7 @@ class LzRpcApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
