@@ -10,7 +10,7 @@ public class ExampleConsumerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ExampleConsumerApplication.class, args);
-		UserService userService = null;
+		UserService userService = new UserServiceProxy();
 		User user = new User();
 		user.setName("dogpei");
 		// 调用

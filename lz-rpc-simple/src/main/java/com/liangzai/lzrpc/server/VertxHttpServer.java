@@ -1,6 +1,7 @@
 package com.liangzai.lzrpc.server;
 
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerResponse;
 
 /**
  * @Author dengpei
@@ -17,12 +18,14 @@ public class VertxHttpServer implements HttpServer{
 		io.vertx.core.http.HttpServer server = vertx.createHttpServer();
 
 		// 监听端口并处理请求
-		server.requestHandler(request -> {
-			System.out.println("Received request: " + request.method() + " " + request.uri());
-			request.response()
-					.putHeader("content-type", "text/plain")
-					.end("Hello from Vert.x HTTP server!");
-		});
+//		server.requestHandler(request -> {
+//			System.out.println("Received request: " + request.method() + " " + request.uri());
+//			request.response()
+//					.putHeader("content-type", "text/plain")
+//					.end("Hello from Vert.x HTTP server!");
+//		});
+
+		server.requestHandler(new HttpServerHandler());
 
 		// 启动HTTP服务器并监听指定端口
 		server.listen(port, result -> {
@@ -32,5 +35,6 @@ public class VertxHttpServer implements HttpServer{
 				System.err.println("Failed to start server: " + result.cause());
 			}
 		});
+
 	}
 }
