@@ -1,5 +1,7 @@
 package com.liangzai.lzrpc.proxy;
 
+import com.liangzai.lzrpc.RpcApplication;
+
 import java.lang.reflect.Proxy;
 
 /**
@@ -8,7 +10,26 @@ import java.lang.reflect.Proxy;
  * @Descprition 服务代理工厂
  */
 public class ServiceProxyFactory {
+	public static <T> T getProxy(Class<T> serviceClass){
+		if(RpcApplication.getRpcConfig().isMock()){
+			return getMockServiceProxy(serviceClass);
+		}
+		return getServiceProxy(serviceClass);
+	}
 
+	/**
+	 * 根据服务类获取 Mock 代理对象
+	 *
+	 * @param serviceClass
+	 * @param <T>
+	 * @return
+	 */
+	public static <T> T getMockServiceProxy(Class<T> serviceClass){
+		return (T) Proxy.newProxyInstance(
+				serviceClass.getClassLoader(),
+				new Class[]{serviceClass},
+				new MockServiceProxy());
+	}
 	/**
 	 * 根据服务类获取代理对象
 	 * Proxy.newProxyInstance 方法用于创建一个动态代理实例，它有三个参数，每个参数的作用如下：
@@ -20,7 +41,7 @@ public class ServiceProxyFactory {
 	 *   一个接口，包含一个方法 invoke(Object proxy, Method method, Object[] args)。当代理类的方法被调用时，这个方法会被执行。
 	 *   proxy 是代理实例，method 是被调用的方法，args 是方法参数。
 	 */
-	public static <T> T getProxy(Class<T> serviceClass){
+	public static <T> T getServiceProxy(Class<T> serviceClass){
 		return (T) Proxy.newProxyInstance(
 				serviceClass.getClassLoader(),
 				new Class[]{serviceClass},

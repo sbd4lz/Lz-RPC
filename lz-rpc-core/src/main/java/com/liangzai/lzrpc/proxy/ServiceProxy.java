@@ -2,6 +2,7 @@ package com.liangzai.lzrpc.proxy;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.liangzai.lzrpc.RpcApplication;
 import com.liangzai.lzrpc.model.RpcRequest;
 import com.liangzai.lzrpc.model.RpcResponse;
 import com.liangzai.lzrpc.serizalizer.JdkSerializer;
@@ -18,7 +19,7 @@ import java.lang.reflect.Method;
  */
 public class ServiceProxy implements InvocationHandler {
 	@Override
-	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable{
 		Serializer serializer = new JdkSerializer();
 
 		RpcRequest rpcRequest = RpcRequest.builder()
@@ -31,7 +32,8 @@ public class ServiceProxy implements InvocationHandler {
 		try {
 			byte[] serialized = serializer.serialize(rpcRequest);
 			byte[] result;
-			try(HttpResponse response = HttpRequest.post("http://localhost:8080")
+			String url = RpcApplication.getRpcConfig().getServerHost() + ":" + RpcApplication.getRpcConfig().getServerPort();
+			try(HttpResponse response = HttpRequest.post(url)
 					.body(serialized)
 					.execute()) {
 				result = response.bodyBytes();
