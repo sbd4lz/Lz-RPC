@@ -10,6 +10,9 @@ import java.util.Map;
  */
 public class SerializerFactory {
 
+	static {
+		SpiLoader.load(Serializer.class);
+	}
 	/**
 	 * 序列化器，用于实现单例
 	 * 	第一层大括号 {} 是创建 HashMap 的匿名子类的语法。
@@ -17,17 +20,18 @@ public class SerializerFactory {
 	 * 	第二层大括号 {} 则是一个实例初始化块（instance initializer block），它允许在匿名内部类的构造函数中添加一些初始化代码。
 	 *   	在这里，它用来在创建 HashMap 时直接向 KEY_SERIALIZER_MAP 中添加初始数据，即调用 put 方法。
 	 */
+	@Deprecated
 	private static final Map<String, Serializer> KEY_SERIALIZER_MAP = new HashMap<String, Serializer>(){{
 		put(SerializerKeys.JDK, new JdkSerializer());
 		put(SerializerKeys.JSON, new JsonSerializer());
-		put(SerializerKeys.KRYO, new KyroSerializer());
+		put(SerializerKeys.KRYO, new KryoSerializer());
 		put(SerializerKeys.HESSIAN, new HessianSerializer());
 	}};
 
 	/**
 	 * 默认序列化器
 	 */
-	private static final Serializer DEFAULT_SERIALIZER = KEY_SERIALIZER_MAP.get("jdk");
+	private static final Serializer DEFAULT_SERIALIZER = new JdkSerializer();
 
 	/**
 	 * 获取实例
@@ -35,7 +39,7 @@ public class SerializerFactory {
 	 * @return
 	 */
 	public static Serializer getInstance(String key) {
-		return KEY_SERIALIZER_MAP.getOrDefault(key, DEFAULT_SERIALIZER);
+		return SpiLoader.getInstance(Serializer.class, key);
 	}
 
 }

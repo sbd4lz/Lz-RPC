@@ -10,9 +10,9 @@ import java.io.ByteArrayOutputStream;
 /**
  * @Author dengpei
  * @Date 2024/11/1 17:17
- * @Descprition Kyro 序列化器
+ * @Descprition Kryo 序列化器
  */
-public class KyroSerializer implements Serializer{
+public class KryoSerializer implements Serializer{
 	/**
 	 * kryo 线程不安全，使用 ThreadLocal 保证每个线程只有一个 Kryo
 	 */
