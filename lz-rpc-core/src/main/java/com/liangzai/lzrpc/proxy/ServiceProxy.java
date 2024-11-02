@@ -5,8 +5,8 @@ import cn.hutool.http.HttpResponse;
 import com.liangzai.lzrpc.RpcApplication;
 import com.liangzai.lzrpc.model.RpcRequest;
 import com.liangzai.lzrpc.model.RpcResponse;
-import com.liangzai.lzrpc.serizalizer.JdkSerializer;
-import com.liangzai.lzrpc.serizalizer.Serializer;
+import com.liangzai.lzrpc.serializer.Serializer;
+import com.liangzai.lzrpc.serializer.SerializerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 public class ServiceProxy implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable{
-		Serializer serializer = new JdkSerializer();
+		final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
 		RpcRequest rpcRequest = RpcRequest.builder()
 				.serviceName(method.getDeclaringClass().getName())

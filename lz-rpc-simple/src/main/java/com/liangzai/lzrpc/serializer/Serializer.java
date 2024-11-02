@@ -1,4 +1,4 @@
-package com.liangzai.lzrpc.serizalizer;
+package com.liangzai.lzrpc.serializer;
 
 import java.io.IOException;
 

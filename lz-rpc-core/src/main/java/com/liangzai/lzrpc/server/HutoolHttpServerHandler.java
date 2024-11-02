@@ -1,10 +1,12 @@
 package com.liangzai.lzrpc.server;
 
+import com.liangzai.lzrpc.RpcApplication;
 import com.liangzai.lzrpc.model.RpcRequest;
 import com.liangzai.lzrpc.model.RpcResponse;
 import com.liangzai.lzrpc.registry.LocalRegistry;
-import com.liangzai.lzrpc.serizalizer.JdkSerializer;
-import com.liangzai.lzrpc.serizalizer.Serializer;
+import com.liangzai.lzrpc.serializer.JdkSerializer;
+import com.liangzai.lzrpc.serializer.Serializer;
+import com.liangzai.lzrpc.serializer.SerializerFactory;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -24,6 +26,9 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 public class HutoolHttpServerHandler implements HttpHandler {
+
+	final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
+
 	@Override
 	public void handle(HttpExchange httpExchange) throws IOException {
 		log.info("Received request: " + httpExchange.getRequestMethod() + " " + httpExchange.getRequestURI().getPath());
@@ -39,13 +44,11 @@ public class HutoolHttpServerHandler implements HttpHandler {
 			objectInputStream.close();
 		}
 
-		final JdkSerializer jdkSerializer = new JdkSerializer();
-
 		RpcResponse rpcResponse = new RpcResponse();
 			// 如果请求为 null，直接返回
 		if (rpcRequest == null) {
 			rpcResponse.setMessage("rpcRequest is null");
-			doResponse(httpExchange, rpcResponse, jdkSerializer);
+			doResponse(httpExchange, rpcResponse, serializer);
 			return;
 		}
 		Class<?> implClass = LocalRegistry.get(rpcRequest.getServiceName());
@@ -61,7 +64,7 @@ public class HutoolHttpServerHandler implements HttpHandler {
 			rpcResponse.setMessage(e.getMessage());
 			rpcResponse.setException(e);
 		}
-		doResponse(httpExchange, rpcResponse, jdkSerializer);
+		doResponse(httpExchange, rpcResponse, serializer);
 	}
 
 	private void doResponse(HttpExchange httpExchange, RpcResponse rpcResponse, Serializer serializer) throws IOException {

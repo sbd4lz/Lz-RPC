@@ -4,8 +4,8 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.liangzai.lzrpc.model.RpcRequest;
 import com.liangzai.lzrpc.model.RpcResponse;
-import com.liangzai.lzrpc.serizalizer.JdkSerializer;
-import com.liangzai.lzrpc.serizalizer.Serializer;
+import com.liangzai.lzrpc.serializer.JdkSerializer;
+import com.liangzai.lzrpc.serializer.Serializer;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;

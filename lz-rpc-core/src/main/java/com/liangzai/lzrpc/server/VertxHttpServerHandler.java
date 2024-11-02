@@ -1,10 +1,13 @@
 package com.liangzai.lzrpc.server;
 
+import com.liangzai.lzrpc.RpcApplication;
+import com.liangzai.lzrpc.config.RpcConfig;
 import com.liangzai.lzrpc.model.RpcRequest;
 import com.liangzai.lzrpc.model.RpcResponse;
 import com.liangzai.lzrpc.registry.LocalRegistry;
-import com.liangzai.lzrpc.serizalizer.JdkSerializer;
-import com.liangzai.lzrpc.serizalizer.Serializer;
+import com.liangzai.lzrpc.serializer.JdkSerializer;
+import com.liangzai.lzrpc.serializer.Serializer;
+import com.liangzai.lzrpc.serializer.SerializerFactory;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;
@@ -28,7 +31,7 @@ public class VertxHttpServerHandler implements Handler<HttpServerRequest> {
 	@Override
 	public void handle(HttpServerRequest request) {
 		// 指定序列化器
-		final JdkSerializer jdkSerializer = new JdkSerializer();
+		final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 		// 记录日志
 		System.out.println("Received request: " + request.method() + " " + request.uri());
 
@@ -36,7 +39,7 @@ public class VertxHttpServerHandler implements Handler<HttpServerRequest> {
 		request.bodyHandler(body -> {
 			RpcRequest rpcRequest = null;
 			try {
-				rpcRequest = jdkSerializer.deserialize(body.getBytes(), RpcRequest.class);
+				rpcRequest = serializer.deserialize(body.getBytes(), RpcRequest.class);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -45,7 +48,7 @@ public class VertxHttpServerHandler implements Handler<HttpServerRequest> {
 			// 如果请求为 null，直接返回
 			if (rpcRequest == null) {
 				rpcResponse.setMessage("rpcRequest is null");
-				doResponse(request, rpcResponse, jdkSerializer);
+				doResponse(request, rpcResponse, serializer);
 				return;
 			}
 			try {
@@ -63,7 +66,7 @@ public class VertxHttpServerHandler implements Handler<HttpServerRequest> {
 				rpcResponse.setException(e);
 			}
 			// 返回响应
-			doResponse(request, rpcResponse, jdkSerializer);
+			doResponse(request, rpcResponse, serializer);
 		});
 	}
 
