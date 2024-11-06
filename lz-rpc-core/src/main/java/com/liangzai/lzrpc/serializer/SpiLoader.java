@@ -1,6 +1,7 @@
 package com.liangzai.lzrpc.serializer;
 
 import cn.hutool.core.io.resource.ResourceUtil;
+import com.liangzai.lzrpc.registry.Registry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -45,7 +46,7 @@ public class SpiLoader {
     /**
      * 动态加载的类列表
      */
-    private static final List<Class<?>> LOAD_CLASS_LIST = Arrays.asList(Serializer.class);
+    private static final List<Class<?>> LOAD_CLASS_LIST = Arrays.asList(Serializer.class, Registry.class);
 
     /**
      * 加载所有类型
@@ -85,9 +86,9 @@ public class SpiLoader {
          */
         String implClassName = implClass.getName();
 //        if (!instanceCache.containsKey(implClassName))  不要这么写，看上面的note
+//            instanceCache.put(implClassName, implClass.newInstance());
             try {
                 instanceCache.putIfAbsent(implClassName, implClass.newInstance());
-//                instanceCache.put(implClassName, implClass.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
                 String errorMsg = String.format("%s 类实例化失败", implClassName);
                 throw new RuntimeException(errorMsg, e);
@@ -110,9 +111,9 @@ public class SpiLoader {
             List<URL> resources = ResourceUtil.getResources(scanDir + loadClass.getName());
             // 读取每个资源文件
             for (URL resource : resources) {
-                try {
-                    InputStreamReader inputStreamReader = new InputStreamReader(resource.openStream());
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                try(InputStreamReader inputStreamReader = new InputStreamReader(resource.openStream());
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    // note 可以只调用 BufferedReader 的 close() 方法，因为 BufferedReader 在其 close() 方法中会自动关闭它所包装的 InputStreamReader
                     String line;
                     while ((line = bufferedReader.readLine()) != null) {
                         String[] strArray = line.split("=");

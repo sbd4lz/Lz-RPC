@@ -19,6 +19,8 @@ public class ExampleConsumerApplication {
 		// 调用   todo 用注解实现
 		UserService userService = ServiceProxyFactory.getProxy(UserService.class);
 		User newUser = userService.getUser(user);
+		userService.getUser(user);
+		userService.getUser(user);
 		if (newUser != null) {
 			System.out.println(newUser.getName());
 		} else {

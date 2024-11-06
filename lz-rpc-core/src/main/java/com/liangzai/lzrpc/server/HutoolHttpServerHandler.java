@@ -4,7 +4,6 @@ import com.liangzai.lzrpc.RpcApplication;
 import com.liangzai.lzrpc.model.RpcRequest;
 import com.liangzai.lzrpc.model.RpcResponse;
 import com.liangzai.lzrpc.registry.LocalRegistry;
-import com.liangzai.lzrpc.serializer.JdkSerializer;
 import com.liangzai.lzrpc.serializer.Serializer;
 import com.liangzai.lzrpc.serializer.SerializerFactory;
 import com.sun.net.httpserver.Headers;

@@ -17,7 +17,7 @@ import com.liangzai.lzrpc.serializer.SerializerFactory;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @Author dengpei
@@ -42,20 +42,18 @@ public class ServiceProxy implements InvocationHandler {
 			byte[] result;
 
 			RpcConfig rpcConfig = RpcApplication.getRpcConfig();
-			Registry registry = RegistryFactory.getInstance(rpcConfig
-					.getRegistryConfig()
-					.getRegistry());
+			Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
 
 			// note 根据 服务名称 到注册中心获取 服务地址
 			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
 			serviceMetaInfo.setServiceName(serviceName);
 			serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
-			List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
-			if (CollUtil.isEmpty(serviceMetaInfoList)) {
+			Map<String, ServiceMetaInfo> serviceMetaInfoMap = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
+			if (CollUtil.isEmpty(serviceMetaInfoMap)) {
 				throw new RuntimeException("暂无服务地址");
 			}
-			// 暂时先取第一个
-			ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+			// todo 暂时随便拿一个值, 后期要负载均衡
+			ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoMap.values().iterator().next();
 
 			try(HttpResponse response = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
 					.body(serialized)

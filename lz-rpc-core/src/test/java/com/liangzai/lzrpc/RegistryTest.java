@@ -7,7 +7,7 @@ import com.liangzai.lzrpc.registry.Registry;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class RegistryTest {
@@ -22,7 +22,6 @@ public class RegistryTest {
 
     @Test
     public void register() throws Exception {
-        init();
         ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName("myService");
         serviceMetaInfo.setServiceVersion("1.0");
@@ -32,8 +31,8 @@ public class RegistryTest {
         serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName("myService");
         serviceMetaInfo.setServiceVersion("1.0");
-        serviceMetaInfo.setServiceHost("localhost");
-        serviceMetaInfo.setServicePort(1235);
+        serviceMetaInfo.setServiceHost("localhost:xxxxxx");
+        serviceMetaInfo.setServicePort(543435);
         registry.register(serviceMetaInfo);
         serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName("myService");
@@ -45,7 +44,6 @@ public class RegistryTest {
 
     @Test
     public void unRegister() throws ExecutionException, InterruptedException {
-        init();
         ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName("myService");
         serviceMetaInfo.setServiceVersion("1.0");
@@ -55,14 +53,29 @@ public class RegistryTest {
     }
 
     @Test
-    public void serviceDiscovery() throws ExecutionException, InterruptedException {
+    public void serviceDiscovery() throws Exception {
         init();
+        register();
         ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName("myService");
         serviceMetaInfo.setServiceVersion("1.0");
         String serviceKey = serviceMetaInfo.getServiceKey();
-        List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceKey);
-        System.out.println(serviceMetaInfoList + "\n===============");
-        Assert.assertNotNull(serviceMetaInfoList);
+        Map<String, ServiceMetaInfo> serviceMetaInfoMap = registry.serviceDiscovery(serviceKey);
+        System.out.println(serviceMetaInfoMap + "\n1111111111111");
+        serviceMetaInfoMap = registry.serviceDiscovery(serviceKey);
+        System.out.println(serviceMetaInfoMap + "\n2222222222222");
+        unRegister();
+        serviceMetaInfoMap = registry.serviceDiscovery(serviceKey);
+        System.out.println(serviceMetaInfoMap + "\n3333333333333");
+        register();
+        serviceMetaInfoMap = registry.serviceDiscovery(serviceKey);
+        System.out.println(serviceMetaInfoMap + "\n4444444444444");
+        Assert.assertNotNull(serviceMetaInfoMap);
+    }
+
+    @Test
+    public void heartBeat() throws Exception{
+        register();
+        Thread.sleep(60 * 1000L);
     }
 }
