@@ -95,7 +95,6 @@ public class EtcdRegistry implements Registry {
         // 优先从缓存获取服务
         Map<String, ServiceMetaInfo> cachedServiceMetaInfoMap = registryServiceCache.readCache(serviceKey);
         if (cachedServiceMetaInfoMap != null) {
-            System.out.println("缓存缓存");
             return cachedServiceMetaInfoMap;
         }
         // 前缀搜索

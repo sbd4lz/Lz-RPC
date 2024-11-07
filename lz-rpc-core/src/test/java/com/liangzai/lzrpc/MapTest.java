@@ -28,8 +28,8 @@ public class MapTest {
 		outMap.put("out2", innerMap2);
 
 		System.out.println(outMap);
-
 		outMap.compute("out3", (k,v)->{
+
 			if(v == null){
 				v = new HashMap<>();
 			}
@@ -38,4 +38,5 @@ public class MapTest {
 		});
 		System.out.println(outMap);
 	}
+
 }

@@ -8,8 +8,8 @@ import com.liangzai.lzrpc.model.ServiceMetaInfo;
 import com.liangzai.lzrpc.registry.LocalRegistry;
 import com.liangzai.lzrpc.registry.Registry;
 import com.liangzai.lzrpc.registry.RegistryFactory;
-import com.liangzai.lzrpc.server.HttpServer;
-import com.liangzai.lzrpc.server.VertxHttpServer;
+import com.liangzai.lzrpc.server.VertxServer;
+import com.liangzai.lzrpc.server.tcp.VertxTcpServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -41,8 +41,8 @@ public class ExampleProviderApplication {
 //		// 启动web服务 todo 该服务应该由rpc-core启动
 //		HttpServer hutoolServer = new HutoolHttpServer();
 //		hutoolServer.doStart(RpcApplication.getRpcConfig().getServerPort());
-		HttpServer vertxHttpServer = new VertxHttpServer();
-		vertxHttpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
+		VertxServer vertxTcpServer = new VertxTcpServer();
+		vertxTcpServer.doStart(RpcApplication.getRpcConfig().getServerPort());
 	}
 
 }

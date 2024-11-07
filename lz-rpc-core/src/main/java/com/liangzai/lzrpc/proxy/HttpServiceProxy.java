@@ -24,7 +24,7 @@ import java.util.Map;
  * @Date 2024/10/31 9:25
  * @Descprition
  */
-public class ServiceProxy implements InvocationHandler {
+public class HttpServiceProxy implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable{
 		final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());

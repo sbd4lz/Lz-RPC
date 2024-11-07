@@ -14,7 +14,8 @@ public class ServiceProxyFactory {
 		if(RpcApplication.getRpcConfig().isMock()){
 			return getMockServiceProxy(serviceClass);
 		}
-		return getServiceProxy(serviceClass);
+		// todo 根据配置选择HTTP/TCP服务代理
+		return getTcpServiceProxy(serviceClass);
 	}
 
 	/**
@@ -39,12 +40,19 @@ public class ServiceProxyFactory {
 	 *   一个 Class 类型的数组，表示代理类需要实现的接口。动态代理只能为接口创建实例，因此该数组不能包含实现类。
 	 * 3. h (InvocationHandler)  类型：InvocationHandler
 	 *   一个接口，包含一个方法 invoke(Object proxy, Method method, Object[] args)。当代理类的方法被调用时，这个方法会被执行。
-	 *   proxy 是代理实例，method 是被调用的方法，args 是方法参数。
+	 *   proxy 是被代理的实例，method 是被调用的方法，args 是方法传入的参数。
 	 */
-	public static <T> T getServiceProxy(Class<T> serviceClass){
+	public static <T> T getHttpServiceProxy(Class<T> serviceClass){
 		return (T) Proxy.newProxyInstance(
 				serviceClass.getClassLoader(),
 				new Class[]{serviceClass},
-				new ServiceProxy());
+				new HttpServiceProxy());
+	}
+
+	public static <T> T getTcpServiceProxy(Class<T> serviceClass){
+		return (T) Proxy.newProxyInstance(
+				serviceClass.getClassLoader(),
+				new Class[]{serviceClass},
+				new TcpServiceProxy());
 	}
 }
