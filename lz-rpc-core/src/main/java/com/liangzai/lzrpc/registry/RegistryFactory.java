@@ -1,6 +1,6 @@
 package com.liangzai.lzrpc.registry;
 
-import com.liangzai.lzrpc.serializer.SpiLoader;
+import com.liangzai.lzrpc.config.SpiLoader;
 
 /**
  * @Author dengpei

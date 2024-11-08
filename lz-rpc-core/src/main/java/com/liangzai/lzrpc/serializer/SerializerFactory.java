@@ -1,5 +1,7 @@
 package com.liangzai.lzrpc.serializer;
 
+import com.liangzai.lzrpc.config.SpiLoader;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ public class SerializerFactory {
 	static {
 		SpiLoader.load(Serializer.class);
 	}
+
 	/**
 	 * 序列化器，用于实现单例
 	 * 	第一层大括号 {} 是创建 HashMap 的匿名子类的语法。
