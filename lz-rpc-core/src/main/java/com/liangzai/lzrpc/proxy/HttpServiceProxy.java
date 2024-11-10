@@ -6,6 +6,8 @@ import cn.hutool.http.HttpResponse;
 import com.liangzai.lzrpc.RpcApplication;
 import com.liangzai.lzrpc.config.RpcConfig;
 import com.liangzai.lzrpc.constant.RpcConstant;
+import com.liangzai.lzrpc.fault.retry.RetryStrategy;
+import com.liangzai.lzrpc.fault.retry.RetryStrategyFactory;
 import com.liangzai.lzrpc.loadbalancer.LoadBalancer;
 import com.liangzai.lzrpc.loadbalancer.LoadBalancerFactory;
 import com.liangzai.lzrpc.model.RpcRequest;
@@ -63,12 +65,17 @@ public class HttpServiceProxy implements InvocationHandler {
 			requestParams.put("methodName", rpcRequest.getMethodName());
 			ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoMap);
 
-			try(HttpResponse response = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
-					.body(serialized)
-					.execute()) {
-				result = response.bodyBytes();
-			}
-			RpcResponse rpcResponse = serializer.deserialize(result, RpcResponse.class);
+			// rpc 请求
+			// 使用重试机制
+			RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+			RpcResponse rpcResponse = retryStrategy.doRetry(() -> {
+				try(HttpResponse response = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
+						.body(serialized)
+						.execute()) {
+					return serializer.deserialize(response.bodyBytes(), RpcResponse.class);
+				}
+			});
+
 			return rpcResponse.getData();
 		} catch (IOException e) {
 			throw new RuntimeException(e);

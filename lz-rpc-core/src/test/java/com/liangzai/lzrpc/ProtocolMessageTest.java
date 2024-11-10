@@ -28,7 +28,6 @@ public class ProtocolMessageTest {
 		header.setSerializer((byte) ProtocolMessageSerializerEnum.JDK.getKey());
 		header.setType((byte) ProtocolMessageTypeEnum.REQUEST.getKey());
 		header.setStatus((byte) ProtocolMessageStatusEnum.OK.getValue());
-		// todo 了解雪花算法
 		header.setRequestId(IdUtil.getSnowflakeNextId());
 		header.setBodyLength(0);
 

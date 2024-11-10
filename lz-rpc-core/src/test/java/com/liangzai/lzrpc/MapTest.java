@@ -37,6 +37,7 @@ public class MapTest {
 			return v;
 		});
 		System.out.println(outMap);
+
 	}
 
 }

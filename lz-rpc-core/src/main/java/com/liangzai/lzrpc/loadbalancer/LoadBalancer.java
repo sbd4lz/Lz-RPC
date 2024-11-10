@@ -9,6 +9,7 @@ import java.util.Map;
  * @Date 2024/11/8 18:25
  * @Descprition  负载均衡器（消费端）
  */
+// fixme 负载均衡的配置由消费端转移到注册中心
 public interface LoadBalancer {
 
 	/**

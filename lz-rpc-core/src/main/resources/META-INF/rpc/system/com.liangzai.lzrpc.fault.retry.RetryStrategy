@@ -1,0 +1,2 @@
+no=com.liangzai.lzrpc.fault.retry.NoRetryStrategy
+fix=com.liangzai.lzrpc.fault.retry.FixedIntervalRetryStrategy
