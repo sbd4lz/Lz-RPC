@@ -42,13 +42,13 @@ public class HttpServiceProxy implements InvocationHandler {
 				.args(args)
 				.build();
 
+		RpcResponse rpcResponse;
+		RpcConfig rpcConfig = RpcApplication.getRpcConfig();
 		try {
 			byte[] serialized = serializer.serialize(rpcRequest);
-			byte[] result;
 
-			RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+
 			Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
-
 			// note 根据 服务名称 到注册中心获取 服务地址
 			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
 			serviceMetaInfo.setServiceName(serviceName);
@@ -68,17 +68,16 @@ public class HttpServiceProxy implements InvocationHandler {
 			// rpc 请求
 			// 使用重试机制
 			RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
-			RpcResponse rpcResponse = retryStrategy.doRetry(() -> {
+			rpcResponse = retryStrategy.doRetry(() -> {
 				try(HttpResponse response = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
 						.body(serialized)
 						.execute()) {
 					return serializer.deserialize(response.bodyBytes(), RpcResponse.class);
 				}
 			});
-
-			return rpcResponse.getData();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		return rpcResponse.getData();
 	}
 }

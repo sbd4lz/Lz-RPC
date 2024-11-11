@@ -2,6 +2,7 @@ package com.liangzai.lzrpc.config;
 
 import cn.hutool.core.io.resource.ResourceUtil;
 import com.liangzai.lzrpc.fault.retry.RetryStrategy;
+import com.liangzai.lzrpc.fault.tolerant.TolerantStrategy;
 import com.liangzai.lzrpc.registry.Registry;
 import com.liangzai.lzrpc.serializer.Serializer;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class SpiLoader {
     /**
      * 动态加载的类列表
      */
-    private static final List<Class<?>> LOAD_CLASS_LIST = Arrays.asList(Serializer.class, Registry.class, RetryStrategy.class);
+    private static final List<Class<?>> LOAD_CLASS_LIST = Arrays.asList(Serializer.class, Registry.class, RetryStrategy.class, TolerantStrategy.class);
 
     /**
      * 加载所有类型

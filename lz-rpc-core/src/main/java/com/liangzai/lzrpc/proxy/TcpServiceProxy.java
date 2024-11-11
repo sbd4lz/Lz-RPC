@@ -6,6 +6,8 @@ import com.liangzai.lzrpc.config.RpcConfig;
 import com.liangzai.lzrpc.constant.RpcConstant;
 import com.liangzai.lzrpc.fault.retry.RetryStrategy;
 import com.liangzai.lzrpc.fault.retry.RetryStrategyFactory;
+import com.liangzai.lzrpc.fault.tolerant.TolerantStrategy;
+import com.liangzai.lzrpc.fault.tolerant.TolerantStrategyFactory;
 import com.liangzai.lzrpc.loadbalancer.LoadBalancer;
 import com.liangzai.lzrpc.loadbalancer.LoadBalancerFactory;
 import com.liangzai.lzrpc.model.RpcRequest;
@@ -23,7 +25,7 @@ import java.util.Map;
 /**
  * @Author dengpei
  * @Date 2024/11/7 17:23
- * @Descprition
+ * @Descprition Tcp服务代理
  */
 public class TcpServiceProxy implements InvocationHandler {
 
@@ -38,10 +40,10 @@ public class TcpServiceProxy implements InvocationHandler {
 				.args(args)
 				.build();
 
-
+		RpcResponse rpcResponse;
+		RpcConfig rpcConfig = RpcApplication.getRpcConfig();;
 		try {
 			// 从注册中心获取服务提供者请求地址 todo 处理重复项
-			RpcConfig rpcConfig = RpcApplication.getRpcConfig();
 			Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
 			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
 			serviceMetaInfo.setServiceName(serviceName);
@@ -60,13 +62,15 @@ public class TcpServiceProxy implements InvocationHandler {
 			// rpc 请求
 			// 使用重试机制
 			RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
-			RpcResponse rpcResponse = retryStrategy.doRetry(() ->
+			rpcResponse = retryStrategy.doRetry(() ->
 					VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
 			);
-			return rpcResponse.getData();
-		} catch (Exception e) {
-			throw new RuntimeException("调用失败");
-		}
 
+		} catch (Exception e) {
+			// 容错机制
+			TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+			rpcResponse = tolerantStrategy.doTolerant(null, e);
+		}
+		return rpcResponse.getData();
 	}
 }

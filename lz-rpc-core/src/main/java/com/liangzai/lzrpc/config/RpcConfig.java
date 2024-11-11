@@ -1,12 +1,14 @@
 package com.liangzai.lzrpc.config;
 
 import com.liangzai.lzrpc.fault.retry.RetryStrategyKeys;
+import com.liangzai.lzrpc.fault.tolerant.TolerantStrategyKeys;
 import com.liangzai.lzrpc.loadbalancer.LoadBalancerKeys;
 import com.liangzai.lzrpc.serializer.SerializerKeys;
 import lombok.Data;
 
 /**
  * RPC 框架配置
+ * @author Kitsch
  */
 @Data
 public class RpcConfig {
@@ -55,5 +57,10 @@ public class RpcConfig {
      * 重试策略
      */
     private String retryStrategy = RetryStrategyKeys.FIXED_INTERVAL;
+
+    /**
+     * 容错策略
+     */
+    private String tolerantStrategy = TolerantStrategyKeys.FAIL_FAST;
 
 }

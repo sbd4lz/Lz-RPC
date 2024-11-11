@@ -1,0 +1,4 @@
+failBack=com.liangzai.lzrpc.fault.tolerant.FailBackTolerantStrategy
+failOver=com.liangzai.lzrpc.fault.tolerant.FailOverTolerantStrategy
+failSafe=com.liangzai.lzrpc.fault.tolerant.FailSafeTolerantStrategy
+failFast=com.liangzai.lzrpc.fault.tolerant.FailFastTolerantStrategy

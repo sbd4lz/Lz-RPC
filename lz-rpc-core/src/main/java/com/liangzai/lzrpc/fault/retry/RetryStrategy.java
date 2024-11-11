@@ -16,5 +16,6 @@ public interface RetryStrategy {
      * @return
      * @throws Exception
      */
+    // todo 实现指数退避算法重试和随机时间重试
     RpcResponse doRetry(Callable<RpcResponse> callable) throws Exception;
 }
