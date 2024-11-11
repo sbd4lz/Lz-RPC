@@ -196,10 +196,10 @@ public class EtcdRegistry implements Registry {
         // 遍历本节点所有的 key
         for (String key : localRegisterNodeKeySet) {
             try {
-                log.info(key + " 节点下线");
+                log.info("服务节点下线：" + key);
                 kvClient.delete(ByteSequence.from(key, StandardCharsets.UTF_8)).get();
             } catch (Exception e) {
-                throw new RuntimeException(key + "节点下线失败");
+                throw new RuntimeException("节点下线失败：" + key);
             }
         }
 

@@ -13,5 +13,4 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot.version>2.6.13</spring-boot.version>
     </properties>
-
 </project>
