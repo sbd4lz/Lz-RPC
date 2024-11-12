@@ -52,11 +52,11 @@ Lz-RPC 支持通过SPI机制自定义注册中心、序列化器、负载均衡�
 
 以自定义ZooKeeper注册中心为例：
 ### 1. 在 Resources/META-INF/rpc/ 目录下创建文件
-注册中心: com.liangzai.lzrpc.registry.Registry
-序列化器: com.liangzai.lzrpc.registry.Serializer
-负载均衡: com.liangzai.lzrpc.fault.retry.LoadBlancer
-重试策略: com.liangzai.lzrpc.fault.retry.RetryStrategy
-容错策略: com.liangzai.lzrpc.registry.TolerantStrategy
+* 注册中心: com.liangzai.lzrpc.registry.Registry
+* 序列化器: com.liangzai.lzrpc.registry.Serializer
+* 负载均衡: com.liangzai.lzrpc.fault.retry.LoadBlancer
+* 重试策略: com.liangzai.lzrpc.fault.retry.RetryStrategy
+* 容错策略: com.liangzai.lzrpc.registry.TolerantStrategy
 ### 2. 根据自定义类编写文件内容
 ```text
 key=value
