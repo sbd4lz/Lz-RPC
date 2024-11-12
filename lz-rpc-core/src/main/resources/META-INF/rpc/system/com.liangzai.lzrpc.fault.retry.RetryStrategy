@@ -1,2 +1,4 @@
 no=com.liangzai.lzrpc.fault.retry.NoRetryStrategy
 fix=com.liangzai.lzrpc.fault.retry.FixedIntervalRetryStrategy
+random=com.liangzai.lzrpc.fault.retry.RandomIntervalRetryStrategy
+fibo=com.liangzai.lzrpc.fault.retry.FibonacciIntervalRetryStrategy

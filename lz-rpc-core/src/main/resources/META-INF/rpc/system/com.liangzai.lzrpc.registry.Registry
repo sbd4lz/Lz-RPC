@@ -1,1 +1,2 @@
 etcd=com.liangzai.lzrpc.registry.EtcdRegistry
+test=com.liangzai.lzrpc.registry.TestRegistry

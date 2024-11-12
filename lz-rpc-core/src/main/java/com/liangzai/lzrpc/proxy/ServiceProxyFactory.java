@@ -14,7 +14,6 @@ public class ServiceProxyFactory {
 		if(RpcApplication.getRpcConfig().isMock()){
 			return getMockServiceProxy(serviceClass);
 		}
-		// todo 根据配置选择HTTP/TCP服务代理
 		return getTcpServiceProxy(serviceClass);
 	}
 

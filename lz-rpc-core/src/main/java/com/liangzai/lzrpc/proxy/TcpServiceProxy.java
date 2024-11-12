@@ -43,7 +43,7 @@ public class TcpServiceProxy implements InvocationHandler {
 		RpcResponse rpcResponse;
 		RpcConfig rpcConfig = RpcApplication.getRpcConfig();;
 		try {
-			// 从注册中心获取服务提供者请求地址 todo 处理重复项
+			// 从注册中心获取服务提供者请求地址
 			Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
 			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
 			serviceMetaInfo.setServiceName(serviceName);

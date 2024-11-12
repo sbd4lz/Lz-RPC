@@ -9,23 +9,24 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @Author dengpei
- * @Date 2024/11/10 11:12
- * @Descprition 固定间隔重试
+ * @Date 2024/11/12 11:11
+ * @Descprition 斐波那契间隔重试
  */
 @Slf4j
-public class FixedIntervalRetryStrategy implements RetryStrategy{
+public class FibonacciIntervalRetryStrategy implements RetryStrategy{
 	@Override
 	public RpcResponse doRetry(Callable<RpcResponse> callable) throws Exception {
 		Retryer<RpcResponse> retryer = RetryerBuilder.<RpcResponse>newBuilder()
 				.retryIfExceptionOfType(Exception.class)
-				.withWaitStrategy(WaitStrategies.fixedWait(3L, TimeUnit.SECONDS))
+				.withWaitStrategy(WaitStrategies.fibonacciWait(15, TimeUnit.SECONDS))
 				.withStopStrategy(StopStrategies.stopAfterAttempt(3))
 				.withRetryListener(new RetryListener() {
 					@Override
 					public <V> void onRetry(Attempt<V> attempt) {
 						log.info("重试次数{}", attempt.getAttemptNumber());
 					}
-				}).build();
-		return retryer.call(callable);
+				})
+				.build();
+		return null;
 	}
 }

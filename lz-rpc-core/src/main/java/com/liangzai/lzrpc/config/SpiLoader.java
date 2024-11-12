@@ -124,6 +124,7 @@ public class SpiLoader {
                             String key = strArray[0];
                             String className = strArray[1];
                             keyClassMap.put(key, Class.forName(className));
+                            log.info("加载{}: {}", key, className);
                         }
                     }
                 } catch (Exception e) {

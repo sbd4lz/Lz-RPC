@@ -9,16 +9,16 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @Author dengpei
- * @Date 2024/11/10 11:12
- * @Descprition 固定间隔重试
+ * @Date 2024/11/12 11:09
+ * @Descprition 随机等待时间重试策略
  */
 @Slf4j
-public class FixedIntervalRetryStrategy implements RetryStrategy{
+public class RandomIntervalRetryStrategy implements RetryStrategy{
 	@Override
 	public RpcResponse doRetry(Callable<RpcResponse> callable) throws Exception {
 		Retryer<RpcResponse> retryer = RetryerBuilder.<RpcResponse>newBuilder()
-				.retryIfExceptionOfType(Exception.class)
-				.withWaitStrategy(WaitStrategies.fixedWait(3L, TimeUnit.SECONDS))
+				.retryIfExceptionOfType(RuntimeException.class)
+				.withWaitStrategy(WaitStrategies.randomWait(10, TimeUnit.SECONDS))
 				.withStopStrategy(StopStrategies.stopAfterAttempt(3))
 				.withRetryListener(new RetryListener() {
 					@Override
@@ -28,4 +28,5 @@ public class FixedIntervalRetryStrategy implements RetryStrategy{
 				}).build();
 		return retryer.call(callable);
 	}
+
 }

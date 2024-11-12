@@ -47,7 +47,6 @@ public class HttpServiceProxy implements InvocationHandler {
 		try {
 			byte[] serialized = serializer.serialize(rpcRequest);
 
-
 			Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
 			// note 根据 服务名称 到注册中心获取 服务地址
 			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
