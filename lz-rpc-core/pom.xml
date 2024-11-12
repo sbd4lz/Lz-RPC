@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.liangzai</groupId>
     <artifactId>lz-rpc-core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>lz-rpc-core</name>
     <description>lz-rpc-core</description>
     <properties>

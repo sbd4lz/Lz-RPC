@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.liangzai</groupId>
             <artifactId>lz-rpc-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
 
         <!-- https://doc.hutool.cn/ -->
