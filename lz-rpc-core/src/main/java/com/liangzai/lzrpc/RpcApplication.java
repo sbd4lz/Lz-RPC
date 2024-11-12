@@ -34,8 +34,11 @@ public class RpcApplication {
 
 	public static void init(){
 		RpcConfig newRpcConfig;
+		RegistryConfig registryConfig;
 		try{
+			registryConfig = ConfigUtils.loadConfig(RegistryConfig.class, RpcConstant.DEFAULT_REGISTRY_CONFIG_PREFIX);
 			newRpcConfig = ConfigUtils.loadConfig(RpcConfig.class, RpcConstant.DEFAULT_CONFIG_PREFIX);
+			newRpcConfig.setRegistryConfig(registryConfig);
 		}catch (Exception e){
 			// 加载失败，使用默认配置
 			newRpcConfig = new RpcConfig();

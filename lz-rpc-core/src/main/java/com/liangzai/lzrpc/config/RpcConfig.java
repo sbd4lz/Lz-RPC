@@ -44,7 +44,7 @@ public class RpcConfig {
     private String serializer = SerializerKeys.JDK;
 
     /**
-     * 注册中心配置 fixme 实现能够在配置文件中读取
+     * 注册中心配置
      */
     private RegistryConfig registryConfig = new RegistryConfig();
 

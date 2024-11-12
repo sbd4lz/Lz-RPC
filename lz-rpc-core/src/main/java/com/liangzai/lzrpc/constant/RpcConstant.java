@@ -8,9 +8,14 @@ package com.liangzai.lzrpc.constant;
 public class RpcConstant {
 
 	/**
-	 * 默认配置文件加载前缀
+	 * 默认RPC配置文件加载前缀
 	 */
 	public static final String DEFAULT_CONFIG_PREFIX = "rpc";
+
+	/**
+	 * 默认注册中心配置文件加载前缀
+	 */
+	public static final String DEFAULT_REGISTRY_CONFIG_PREFIX = "rpc.registry";
 
 	/**
 	 * 默认服务版本
