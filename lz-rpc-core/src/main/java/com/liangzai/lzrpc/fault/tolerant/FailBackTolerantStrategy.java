@@ -12,7 +12,7 @@ import java.util.Map;
 public class FailBackTolerantStrategy implements TolerantStrategy{
 	@Override
 	public RpcResponse doTolerant(Map<String, Object> context, Exception e) {
-		// todo 编写本地降级服务 可以参考 Dubbo 的 Mock 能力，让消费端指定调用失败后要执行的本地服务和方法。
+		// todo 编写本地降级服务 参考 Dubbo 的 Mock 能力，让消费端指定调用失败后要执行的本地服务和方法。
 		return null;
 	}
 }

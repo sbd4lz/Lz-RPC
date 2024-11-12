@@ -31,7 +31,7 @@ public class ProviderBootstrap {
 			LocalRegistry.register(serviceName, serviceRegisterInfo.getImplClass());
 			// 注册到注册中心
 			RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
-			Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+			Registry registry = RegistryFactory.getInstance(registryConfig.getType());
 			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
 			serviceMetaInfo.setServiceName(serviceName);
 			serviceMetaInfo.setServiceHost(rpcConfig.getServerHost());

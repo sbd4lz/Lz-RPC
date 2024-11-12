@@ -8,6 +8,8 @@ import com.liangzai.lzrpc.config.RpcConfig;
 import com.liangzai.lzrpc.constant.RpcConstant;
 import com.liangzai.lzrpc.fault.retry.RetryStrategy;
 import com.liangzai.lzrpc.fault.retry.RetryStrategyFactory;
+import com.liangzai.lzrpc.fault.tolerant.TolerantStrategy;
+import com.liangzai.lzrpc.fault.tolerant.TolerantStrategyFactory;
 import com.liangzai.lzrpc.loadbalancer.LoadBalancer;
 import com.liangzai.lzrpc.loadbalancer.LoadBalancerFactory;
 import com.liangzai.lzrpc.model.RpcRequest;
@@ -47,7 +49,7 @@ public class HttpServiceProxy implements InvocationHandler {
 		try {
 			byte[] serialized = serializer.serialize(rpcRequest);
 
-			Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+			Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getType());
 			// note 根据 服务名称 到注册中心获取 服务地址
 			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
 			serviceMetaInfo.setServiceName(serviceName);
@@ -59,7 +61,7 @@ public class HttpServiceProxy implements InvocationHandler {
 
 			// 负载均衡
 			LoadBalancer loadBalancer = LoadBalancerFactory.getInstance(rpcConfig.getLoadBalancer());
-			// 将调用方法名（请求路径）作为负载均衡参数 todo 修改
+			// 将调用方法名（请求路径）作为负载均衡参数
 			Map<String, Object> requestParams = new HashMap<>();
 			requestParams.put("methodName", rpcRequest.getMethodName());
 			ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoMap);
@@ -75,7 +77,8 @@ public class HttpServiceProxy implements InvocationHandler {
 				}
 			});
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+			rpcResponse = tolerantStrategy.doTolerant(null, e);
 		}
 		return rpcResponse.getData();
 	}

@@ -21,9 +21,8 @@ public class ConsistentHashLoadBalancer implements LoadBalancer{
 	 * 虚拟节点数
 	 */
 	private static final int VIRTUAL_NODE_NUM = 100;
-	// fixme treemap 线程不安全，修改
 	@Override
-	public ServiceMetaInfo select(Map<String, Object> requestParams, Map<String, ServiceMetaInfo> serviceMetaInfoMap) {
+	public synchronized ServiceMetaInfo select(Map<String, Object> requestParams, Map<String, ServiceMetaInfo> serviceMetaInfoMap) {
 		int serviceNodeNum = serviceMetaInfoMap.size();
 		if(serviceNodeNum == 1){
 			return serviceMetaInfoMap.values().iterator().next();
@@ -44,7 +43,6 @@ public class ConsistentHashLoadBalancer implements LoadBalancer{
 			entry = hashCircle.firstEntry();
 		}
 		return serviceMetaInfoMap.get(entry.getValue());
-
 	}
 
 	/**

@@ -11,7 +11,6 @@ import io.vertx.core.parsetools.RecordParser;
  * @Descprition  使用 recordParser 装饰 buffer, 处理半包和粘包问题
  */
 public class TcpBufferHandlerWrapper implements Handler<Buffer> {
-	// todo 理解此处的装饰器模式
 	private final RecordParser recordParser;
 
 	public TcpBufferHandlerWrapper(Handler<Buffer> bufferHandler) {

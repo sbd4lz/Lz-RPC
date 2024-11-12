@@ -34,7 +34,7 @@ public class VertxTcpServerHandler implements Handler<NetSocket> {
 			RpcResponse rpcResponse = new RpcResponse();
 			try {
 				RpcRequest rpcRequest = protocolMessage.getBody();
-				// todo 通过反射创建实例只能调用无参构造函数，对于有参构造函数或者需要自动注入的属性，这种方式就行不通了。
+				// fixme 通过反射创建实例只能调用无参构造函数，对于有参构造函数或者需要自动注入的属性，这种方式就行不通了。
 				Class<?> implClass = LocalRegistry.get(rpcRequest.getServiceName());
 				Method method = implClass.getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterTypes());
 				Object result = method.invoke(implClass.newInstance(), rpcRequest.getArgs());

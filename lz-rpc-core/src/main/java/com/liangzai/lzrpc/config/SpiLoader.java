@@ -39,7 +39,7 @@ public class SpiLoader {
     /**
      * 用户自定义 SPI 目录
      */
-    private static final String RPC_CUSTOM_SPI_DIR = "META-INF/rpc/custom/";
+    private static final String RPC_CUSTOM_SPI_DIR = "META-INF/rpc";
 
     /**
      * 扫描路径

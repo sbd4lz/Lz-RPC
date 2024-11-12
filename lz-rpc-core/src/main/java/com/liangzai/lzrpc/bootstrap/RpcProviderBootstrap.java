@@ -47,7 +47,7 @@ public class RpcProviderBootstrap implements BeanPostProcessor {
 			final RpcConfig rpcConfig = RpcApplication.getRpcConfig();
 			// 注册服务到注册中心
 			RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
-			Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+			Registry registry = RegistryFactory.getInstance(registryConfig.getType());
 			ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
 			serviceMetaInfo.setServiceName(serviceName);
 			serviceMetaInfo.setServiceVersion(serviceVersion);
