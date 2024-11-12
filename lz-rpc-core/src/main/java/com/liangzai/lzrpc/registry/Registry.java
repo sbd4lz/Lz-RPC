@@ -44,14 +44,14 @@ public interface Registry {
     /**
      * 心跳检测（服务端）
      */
-    void heartBeat();
+    default void heartBeat(){};
 
     /**
      * 监听（消费端）
      *
      * @param serviceKey
      */
-    void watch(String serviceKey);
+    default void watch(String serviceKey){};
 
     /**
      * 服务销毁（服务端）
