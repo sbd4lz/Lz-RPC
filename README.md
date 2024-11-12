@@ -1,4 +1,4 @@
-# 靓仔高性能RPC框架
+# 靓仔可扩展高性能RPC框架
 
 ### Java + Etcd + Vert.x 自定义RPC传输协议的RPC实现，提供多种序列化方式、负载均衡策略和重试策略。
 
@@ -63,11 +63,42 @@ key=value
 键名=引用路径
 zookeeper=com.xxxxx.xxxxx.registry.ZookeeperRegistry
 ```
-### 3. 实现com.liangzai.lzrpc.registry.Registry接口
 
-### 4. 修改配置文件
+### 3. 修改配置文件
 ```properties
 rpc.registry.type=zookeeper
 rpc.registry.address=127.0.0.1:2181
 ...                  
+```
+
+### 4. 实现com.liangzai.lzrpc.registry.Registry接口
+```java
+public class ZookeeperRegistry implements Registry{
+	// 初始化
+	@Override
+	public void init(RegistryConfig registryConfig) {
+	}
+	
+	// 注册服务
+	@Override
+	public boolean register(ServiceMetaInfo serviceMetaInfo) throws Exception {
+		return false;
+	}
+	
+	// 注销服务
+	@Override
+	public void unRegister(ServiceMetaInfo serviceMetaInfo) throws ExecutionException, InterruptedException {
+	}
+	
+	// 服务发现
+	@Override
+	public Map<String, ServiceMetaInfo> serviceDiscovery(String serviceKey) throws ExecutionException, InterruptedException {
+		return null;
+	}
+	
+	// 服务销毁
+	@Override
+	public void destroy() {
+	}
+}
 ```
