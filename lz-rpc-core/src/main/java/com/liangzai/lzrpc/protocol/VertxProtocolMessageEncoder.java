@@ -12,7 +12,7 @@ import java.io.IOException;
  * @Date 2024/11/7 16:19
  * @Descprition 协议消息编码器
  */
-public class ProtocolMessageEncoder {
+public class VertxProtocolMessageEncoder {
 
 	public static Buffer encode(ProtocolMessage<?> protocolMessage) throws IOException {
 		if (protocolMessage == null || protocolMessage.getHeader() == null) {

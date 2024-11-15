@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Descprition
  */
 @Slf4j
-public class VertxHttpServer implements VertxServer {
+public class VertxHttpServer implements Server {
 	@Override
 	public void doStart(int port) {
 		// 创建Vert.x实例

@@ -18,6 +18,9 @@ public class ExampleServiceImplTest {
 
 	@Test
 	void test1() {
-		exampleService.test();
+		for (int i = 0; i < 500; i++) {
+			exampleService.test();
+		}
+
 	}
 }

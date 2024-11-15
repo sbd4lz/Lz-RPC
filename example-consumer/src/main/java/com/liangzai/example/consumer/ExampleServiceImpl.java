@@ -18,7 +18,7 @@ public class ExampleServiceImpl {
 
 	public void test() {
 		User user = new User();
-		user.setName("DOG 沛");
+		user.setName("DOG 沛 DOG 沛 DOG 沛 DOG 沛 DOG 沛 DOG 沛 DOG 沛 DOG 沛 DOG 沛");
 		User resultUser = userService.getUser(user);
 		System.out.println(resultUser.getName());
 	}

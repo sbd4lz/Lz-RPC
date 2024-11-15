@@ -2,39 +2,36 @@ package com.liangzai.lzrpc.server.tcp;
 
 import com.liangzai.lzrpc.model.RpcRequest;
 import com.liangzai.lzrpc.model.RpcResponse;
+import com.liangzai.lzrpc.protocol.NettyProtocolMessageDecoder;
+import com.liangzai.lzrpc.protocol.NettyProtocolMessageEncoder;
 import com.liangzai.lzrpc.protocol.ProtocolMessage;
-import com.liangzai.lzrpc.protocol.VertxProtocolMessageDecoder;
-import com.liangzai.lzrpc.protocol.VertxProtocolMessageEncoder;
 import com.liangzai.lzrpc.protocol.ProtocolMessageTypeEnum;
 import com.liangzai.lzrpc.registry.LocalRegistry;
-import io.vertx.core.Handler;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.net.NetSocket;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
- * @Author dengpei
- * @Date 2024/11/7 17:08
- * @Descprition tcp请求处理
+ * @author Kitsch
  */
-public class VertxTcpServerHandler implements Handler<NetSocket> {
-
-	@Override
-	public void handle(NetSocket netSocket) {
-		TcpBufferHandlerWrapper bufferHandlerWrapper = new TcpBufferHandlerWrapper(buffer -> {
-			// 默认消息类型为 RpcRequest
+@Slf4j
+public class NettyTcpServerHandler extends ChannelInboundHandlerAdapter {
+		@Override
+		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception{
+			ByteBuf buffer = (ByteBuf)msg;
 			ProtocolMessage<RpcRequest> protocolMessage;
 			try {
-				protocolMessage = (ProtocolMessage<RpcRequest>) VertxProtocolMessageDecoder.decode(buffer);
+				protocolMessage = (ProtocolMessage<RpcRequest>) NettyProtocolMessageDecoder.decode(buffer);
 			} catch (IOException e) {
 				throw new RuntimeException("协议消息解码错误");
 			}
 			RpcResponse rpcResponse = new RpcResponse();
 			try {
 				RpcRequest rpcRequest = protocolMessage.getBody();
-				// fixme 通过反射创建实例只能调用无参构造函数，对于有参构造函数或者需要自动注入的属性，这种方式就行不通了。
 				Class<?> implClass = LocalRegistry.get(rpcRequest.getServiceName());
 				Method method = implClass.getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterTypes());
 				Object result = method.invoke(implClass.newInstance(), rpcRequest.getArgs());
@@ -51,14 +48,15 @@ public class VertxTcpServerHandler implements Handler<NetSocket> {
 			header.setType((byte) ProtocolMessageTypeEnum.RESPONSE.getKey());
 			ProtocolMessage<RpcResponse> responseProtocolMessage = new ProtocolMessage<>(header, rpcResponse);
 			try {
-				Buffer encode = VertxProtocolMessageEncoder.encode(responseProtocolMessage);
-				netSocket.write(encode);
+				ByteBuf encode = NettyProtocolMessageEncoder.encode(responseProtocolMessage);
+				ctx.writeAndFlush(encode);  // 发送消息到客户端
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-		});
-
-		netSocket.handler(bufferHandlerWrapper);
-
+		}
+		@Override
+		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+			cause.printStackTrace();
+			ctx.close();  // 发生异常时关闭连接
+		}
 	}
-}

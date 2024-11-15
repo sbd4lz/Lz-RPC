@@ -15,7 +15,7 @@ import com.liangzai.lzrpc.model.RpcResponse;
 import com.liangzai.lzrpc.model.ServiceMetaInfo;
 import com.liangzai.lzrpc.registry.Registry;
 import com.liangzai.lzrpc.registry.RegistryFactory;
-import com.liangzai.lzrpc.server.tcp.VertxTcpClient;
+import com.liangzai.lzrpc.server.tcp.NettyTcpClient;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -63,7 +63,8 @@ public class TcpServiceProxy implements InvocationHandler {
 			// 使用重试机制
 			RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
 			rpcResponse = retryStrategy.doRetry(() ->
-					VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+//					VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+					NettyTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
 			);
 
 		} catch (Exception e) {

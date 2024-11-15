@@ -1,6 +1,6 @@
 package com.liangzai.lzrpc.server.tcp;
 
-import com.liangzai.lzrpc.server.VertxServer;
+import com.liangzai.lzrpc.server.Server;
 import io.vertx.core.Vertx;
 import io.vertx.core.net.NetServer;
 /**
@@ -8,13 +8,8 @@ import io.vertx.core.net.NetServer;
  * @Date 2024/11/7 15:41
  * @Descprition
  */
-public class VertxTcpServer implements VertxServer {
+public class VertxTcpServer implements Server {
 
-	private byte[] handleRequest(byte[] requestData) {
-		// 在这里编写处理请求的逻辑，根据 requestData 构造响应数据并返回
-		// 这里只是一个示例，实际逻辑需要根据具体的业务需求来实现
-		return "Hello, client!".getBytes();
-	}
 	@Override
 	public void doStart(int port) {
 		// 创建 Vert.x 实例
@@ -35,7 +30,5 @@ public class VertxTcpServer implements VertxServer {
 		});
 
 	}
-	public static void main(String[] args) {
-		new VertxTcpServer().doStart(8888);
-	}
+
 }

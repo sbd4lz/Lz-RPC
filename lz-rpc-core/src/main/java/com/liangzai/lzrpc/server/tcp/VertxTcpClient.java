@@ -58,7 +58,7 @@ public class VertxTcpClient {
 
 					// 编码请求
 					try {
-						Buffer encodeBuffer = ProtocolMessageEncoder.encode(protocolMessage);
+						Buffer encodeBuffer = VertxProtocolMessageEncoder.encode(protocolMessage);
 						socket.write(encodeBuffer);
 					} catch (IOException e) {
 						throw new RuntimeException("协议消息编码错误");
@@ -69,7 +69,7 @@ public class VertxTcpClient {
 							buffer -> {
 								try {
 									ProtocolMessage<RpcResponse> rpcResponseProtocolMessage =
-											(ProtocolMessage<RpcResponse>) ProtocolMessageDecoder.decode(buffer);
+											(ProtocolMessage<RpcResponse>) VertxProtocolMessageDecoder.decode(buffer);
 									responseFuture.complete(rpcResponseProtocolMessage.getBody());
 								} catch (IOException e) {
 									throw new RuntimeException("协议消息解码错误");

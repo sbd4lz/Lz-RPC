@@ -10,6 +10,7 @@ import java.util.Map;
  * @Descprition  负载均衡器（消费端）
  */
 // fixme 负载均衡的配置由消费端转移到注册中心, 能够实现背压
+	// todo 不同服务处理能力不一样，如何平衡，需要MQ吗？
 public interface LoadBalancer {
 
 	/**

@@ -4,18 +4,18 @@ import com.liangzai.lzrpc.model.RpcRequest;
 import com.liangzai.lzrpc.model.RpcResponse;
 import com.liangzai.lzrpc.serializer.Serializer;
 import com.liangzai.lzrpc.serializer.SerializerFactory;
-import io.vertx.core.buffer.Buffer;
+import io.netty.buffer.ByteBuf;
 
 import java.io.IOException;
 
 /**
  * @Author dengpei
- * @Date 2024/11/7 16:20
- * @Descprition 协议消息解码器
+ * @Date 2024/11/15 19:20
+ * @Descprition
  */
-public class ProtocolMessageDecoder {
+public class NettyProtocolMessageDecoder {
 
-	public static ProtocolMessage<?> decode(Buffer buffer) throws IOException {
+	public static ProtocolMessage<?> decode(ByteBuf buffer) throws IOException {
 		ProtocolMessage.Header header = new ProtocolMessage.Header();
 		byte magic = buffer.getByte(0);
 		// 校验魔数
@@ -31,7 +31,8 @@ public class ProtocolMessageDecoder {
 		header.setRequestId(buffer.getLong(5));
 		header.setBodyLength(buffer.getInt(13));
 		// 防止粘包问题，只读指定长度的数据
-		byte[] bodyBytes = buffer.getBytes(17, 17 + header.getBodyLength());
+		byte[] bodyBytes = new byte[header.getBodyLength()];
+		buffer.getBytes(17, bodyBytes);
 		// 解析消息体
 		ProtocolMessageSerializerEnum serializerEnum = ProtocolMessageSerializerEnum.getEnumByKey(header.getSerializer());
 		if (serializerEnum == null) {

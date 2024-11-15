@@ -3,7 +3,7 @@ package com.liangzai.lzrpc.bootstrap;
 import com.liangzai.lzrpc.RpcApplication;
 import com.liangzai.lzrpc.annotation.EnableLzRPC;
 import com.liangzai.lzrpc.config.RpcConfig;
-import com.liangzai.lzrpc.server.tcp.VertxTcpServer;
+import com.liangzai.lzrpc.server.tcp.NettyTcpServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -37,10 +37,16 @@ public class RpcInitBootstrap implements ImportBeanDefinitionRegistrar {
 
 		// 启动服务器
 		if (needServer) {
-			VertxTcpServer vertxTcpServer = new VertxTcpServer();
-			vertxTcpServer.doStart(rpcConfig.getServerPort());
+//			VertxTcpServer vertxTcpServer = new VertxTcpServer();
+//			vertxTcpServer.doStart(rpcConfig.getServerPort());
+			try {
+				NettyTcpServer nettyTcpServer = new NettyTcpServer();
+				nettyTcpServer.doStart(rpcConfig.getServerPort());
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 		} else {
-			log.info("不启动 server");
+			log.info("TCP server 未启动。");
 		}
 	}
 }

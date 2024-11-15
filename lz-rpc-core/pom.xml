@@ -14,6 +14,12 @@
         <spring-boot.version>2.6.13</spring-boot.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.112.Final</version>
+        </dependency>
         <!-- https://github.com/rholder/guava-retrying -->
         <dependency>
             <groupId>com.github.rholder</groupId>

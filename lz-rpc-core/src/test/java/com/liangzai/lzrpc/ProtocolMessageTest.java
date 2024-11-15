@@ -41,8 +41,8 @@ public class ProtocolMessageTest {
 		protocolMessage.setHeader(header);
 		protocolMessage.setBody(rpcRequest);
 
-		Buffer encodeBuffer = ProtocolMessageEncoder.encode(protocolMessage);
-		ProtocolMessage<?> message = ProtocolMessageDecoder.decode(encodeBuffer);
+		Buffer encodeBuffer = VertxProtocolMessageEncoder.encode(protocolMessage);
+		ProtocolMessage<?> message = VertxProtocolMessageDecoder.decode(encodeBuffer);
 		System.out.println(message);
 		Assert.assertNotNull(message);
 	}

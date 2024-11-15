@@ -8,6 +8,7 @@ import com.liangzai.lzrpc.model.ServiceMetaInfo;
 import com.liangzai.lzrpc.registry.LocalRegistry;
 import com.liangzai.lzrpc.registry.Registry;
 import com.liangzai.lzrpc.registry.RegistryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * @Date 2024/11/11 19:17
  * @Descprition LzRPCService注解处理类
  */
+@Slf4j
 public class RpcProviderBootstrap implements BeanPostProcessor {
 
 
@@ -55,6 +57,7 @@ public class RpcProviderBootstrap implements BeanPostProcessor {
 			serviceMetaInfo.setServicePort(rpcConfig.getServerPort());
 			try {
 				registry.register(serviceMetaInfo);
+				log.info(serviceName + " 服务注册成功");
 			} catch (Exception e) {
 				throw new RuntimeException(serviceName + " 服务注册失败", e);
 			}
