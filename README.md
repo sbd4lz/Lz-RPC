@@ -14,7 +14,6 @@
   | Magic | Version | Serializer | Type  | Status | RPC Request ID | Data Length |
   |:-----:|:-------:|:----------:|:-----:|:------:|:--------------:|:-----------:|
   | 8 bit |  8 bit  |   8 bit    | 8 bit | 8 bit  |     64 bit     |   32 bit    |
-### 用我写的框架你就死心吧, 保证把事给你办砸啰。
 
 ## 配置方法
 ### 1.在服务消费者和服务提供者模块中引入Lz-Rpc：
